@@ -1,0 +1,30 @@
+# docker-compose.yml
+services:
+  app:
+    # We will build and push the image in Jenkins, then reference it here.
+    #image: your-docker-registry/your-app-name:${IMAGE_TAG:-latest}
+    image: crashrik/student-api:v1.0
+
+    ports:
+      - "5000:5000"
+    environment:
+      # --- MongoDB Atlas URI ---
+      # This variable will be injected at runtime.
+      # For local development, you might use a .env file (e.g., '.env' or '.env.local')
+      # For CI/CD, Jenkins will inject this (e.g., from Secret Text credentials)
+      MONGO_URI: ${MONGO_URI} # This placeholder will be replaced by your actual Atlas URI
+      DB_NAME: ${DB_NAME}
+      COLLECTION_NAME: ${COLLECTION_NAME}
+    networks:
+      - app_network
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+networks:
+  app_network:

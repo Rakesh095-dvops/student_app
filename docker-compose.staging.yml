@@ -1,0 +1,7 @@
+# docker-compose.staging.yml
+services:
+  app:
+    environment:
+    
+      # It will inherit MONGO_ATLAS_URI from the main docker-compose.yml and the environment.
+      DEBUG_MODE: "true"
