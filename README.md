@@ -8,6 +8,15 @@
 - CI/CD ready with Jenkins
 
 ## 🚀 Run Locally
+
+-Create ```.env``` file and filled in details.
+
+```
+MONGO_URI={mongoDB Connection String}
+DB_NAME= {database name }
+COLLECTION_NAME={collection details}
+```
+
 ```bash
 pip install -r requirements.txt
 python app.py
