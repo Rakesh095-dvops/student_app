@@ -2,6 +2,7 @@
 
 services:
   app: 
+    image: "${IMAGE_NAME}:${IMAGE_TAG}"
     environment:
       # Similar to staging, it relies on the MONGO_ATLAS_URI from the main env.
       DEBUG_MODE: "false"

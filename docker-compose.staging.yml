@@ -1,6 +1,7 @@
 # docker-compose.staging.yml
 services:
   app:
+    image: "${IMAGE_NAME}:${IMAGE_TAG}"
     environment:
     
       # It will inherit MONGO_ATLAS_URI from the main docker-compose.yml and the environment.

@@ -2,8 +2,8 @@
 services:
   app:
     # We will build and push the image in Jenkins, then reference it here.
-    image: your-docker-registry/your-app-name:${IMAGE_TAG:-latest}
-    #image: crashrik/student-api:v1.0
+    #image: your-docker-registry/your-app-name:${IMAGE_TAG:-latest}
+    image: crashrik/student-api:v1.0
 
     ports:
       - "5000:5000"
