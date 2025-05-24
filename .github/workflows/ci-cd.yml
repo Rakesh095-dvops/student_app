@@ -77,6 +77,8 @@ jobs:
           echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
           echo "COLLECTION_NAME=${{ secrets.COLLECTION_NAME }}" >> .env
+          echo "IMAGE_NAME=${DOCKER_HUB_REPOSITORY}" >> .env
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> .env
       - name: List files
         run: |
           ls -la
@@ -112,6 +114,7 @@ jobs:
             # Login to Docker Hub
             sudo echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
             # Pull latest images
+            #sudo docker-compose -f docker-compose.yml -f docker-compose.staging.yml --env-file ./.env up -d --remove-orphans
             sudo docker-compose -f docker-compose.yml -f docker-compose.staging.yml --env-file ./.env pull
             # Start containers
             sudo docker-compose -f docker-compose.yml -f docker-compose.staging.yml --env-file ./.env up -d --remove-orphans
