@@ -46,7 +46,16 @@ docker compose ps
 
 ## 🛠️ Jenkins Pipeline
 This project contains a `Jenkinsfile` to automate:
-- Code clone
-- Dependency install
-- Test execution
-- App deployment
+- Check Docker
+- Code Clone
+- Unit Tests
+- Build & Push Docker Image
+- Deploy to Staging
+- Staging Tests (Integration)
+- Deploy to Production
+- Production Tests (Integration)
+- post
+    - always -> clean workspace
+    - success/failure/aborted -> sent email about build details
+
+For solution and detailed steps refer [Jenkins Readme](https://github.com/Rakesh095-dvops/)
