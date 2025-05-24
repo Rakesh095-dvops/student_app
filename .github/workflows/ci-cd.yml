@@ -33,6 +33,11 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Create .env file
+        run: |
+          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+          echo "COLLECTION_NAME=${{ secrets.COLLECTION_NAME }}" >> .env
       - name: Run tests
         run: pytest
 

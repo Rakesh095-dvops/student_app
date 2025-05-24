@@ -67,4 +67,12 @@ This project contains a `Jenkinsfile` to automate the following stages:
 
 > **For detailed CI/CD steps, refer to the [Jenkins Readme](https://github.com/Rakesh095-dvops/student_app/blob/main/Jenkins/README_J.MD).**
 
+##  🛠️ GitHub Workflow Action 
+This project contains a `.github\workflows\ci-cd.yml` to automate the github action pass through following stages 
+- install-dependencies
+- run-tests
+- build docker image
+- deploy-staging
+- deploy-production
+> **For detailed CI/CD steps, refer to the [Git Action Readme](https://github.com/Rakesh095-dvops/student_app/blob/main/gitaction/README_J.MD).**
 ---
