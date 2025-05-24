@@ -78,10 +78,15 @@ jobs:
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
           echo "COLLECTION_NAME=${{ secrets.COLLECTION_NAME }}" >> .env
       - name: List files
-        run: ls -l
+        run: ls -la
+      - name: Write SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+
       - name: Copy files to Staging EC2
         run: |
-          scp -i ${{ secrets.EC2_SSH_KEY }} .env docker-compose.yml docker-compose.staging.yml ${{ secrets.EC2_USER }}@${{ secrets.STAGING_EC2_HOST }}:/home/ubuntu/app/
+          scp -i key.pem .env docker-compose.yml docker-compose.staging.yml ${{ secrets.EC2_USER }}@${{ secrets.STAGING_EC2_HOST }}:/home/ubuntu/app/
       - name: Deploy to Staging EC2 with Docker Compose
         uses: appleboy/ssh-action@v1.0.1
         with:
