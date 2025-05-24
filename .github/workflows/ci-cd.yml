@@ -92,10 +92,10 @@ jobs:
           script: |
             mkdir -p /home/ubuntu/app
             
-      - name: Print working directory
-        run: pwd
+      - name: Check files before SCP
+        run: ls -l .env docker-compose.yml docker-compose.staging.yml
       - name: Deploy to AWS EC2
-        uses: appleboy/scp-action@master
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.STAGING_EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
