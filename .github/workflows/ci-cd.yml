@@ -81,25 +81,23 @@ jobs:
         run: |
           ls -la
           pwd 
-      - name: Write SSH key
-        run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
-          chmod 600 key.pem
-      - name: Debug Secrets
-        run: |
-          echo "Host: ${{ secrets.STAGING_EC2_HOST }}"
-          echo "User: ${{ secrets.EC2_USER }}" 
-          
-      - name: Check DNS Resolution
-        run: nslookup ${{ secrets.STAGING_EC2_HOST }}   
-
-      - name: Ensure remote directory exists
-        run: |
-          ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.STAGING_EC2_HOST }} "mkdir -p /home/ubuntu/app"
-
-      - name: Copy files to Staging EC2
-        run: |
-          scp -i key.pem -o StrictHostKeyChecking=no .env docker-compose.yml docker-compose.staging.yml ${{ secrets.EC2_USER }}@${{ secrets.STAGING_EC2_HOST }}:/home/ubuntu/app/
+      - name: Ensure app directory exists on Staging EC2
+        uses: appleboy/ssh-action@v1.0.1
+        with:
+          host: ${{ secrets.STAGING_EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            mkdir -p /home/ubuntu/app
+            cd /home/ubuntu/app
+      - name: Deploy to AWS EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.STAGING_EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "./"  # This now correctly points to the current directory
+          target: "/home/ubuntu/app"
       - name: Deploy to Staging EC2 with Docker Compose
         uses: appleboy/ssh-action@v1.0.1
         with:
