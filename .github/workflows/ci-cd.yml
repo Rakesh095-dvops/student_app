@@ -77,18 +77,11 @@ jobs:
           echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
           echo "COLLECTION_NAME=${{ secrets.COLLECTION_NAME }}" >> .env
+      - name: List files
+        run: ls -l
       - name: Copy files to Staging EC2
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.STAGING_EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: |
-            .env
-            docker-compose.yml
-            docker-compose.staging.yml
-            # Add other necessary files/directories here
-          target: "/home/ubuntu/app/"
+        run: |
+          scp -i ${{ secrets.EC2_SSH_KEY }} .env docker-compose.yml docker-compose.staging.yml ${{ secrets.EC2_USER }}@${{ secrets.STAGING_EC2_HOST }}:/home/ubuntu/app/
       - name: Deploy to Staging EC2 with Docker Compose
         uses: appleboy/ssh-action@v1.0.1
         with:
