@@ -69,6 +69,13 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v4
+      - name: clean up old files
+        run: |
+          if [ -d "/home/ubuntu/app" ]; then
+            sudo rm -rf /home/ubuntu/app/*
+          else
+            sudo mkdir -p /home/ubuntu/app
+          fi
       - name: Clone or update repo on Staging EC2
         uses: appleboy/ssh-action@v1.0.1
         with:
