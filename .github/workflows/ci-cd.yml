@@ -71,6 +71,7 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: clean up old files
+        # This step ensures that the app directory is clean before deployment
         run: |
             sudo mkdir -p /home/ubuntu/app
             sudo chown $USER:$USER /home/ubuntu/app
