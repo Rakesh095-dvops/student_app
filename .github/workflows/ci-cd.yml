@@ -99,7 +99,7 @@ jobs:
           ls -la docker-compose.staging.yml
           echo "Current directory: $(pwd)"
       - name: Deploy to AWS EC2
-        uses: appleboy/scp-action@v0.1.8
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.STAGING_EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -134,7 +134,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Copy files to Production EC2
-        uses: appleboy/scp-action@v0.1.8
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.PROD_EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
