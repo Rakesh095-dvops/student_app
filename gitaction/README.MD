@@ -11,7 +11,7 @@
 
 - The `deploy-staging` job is triggered after a successful `build`.  
   The `build` job depends on passing unit tests (`run-tests`) for the Flask application using pytest.  
-  This cycle runs on every push or pull request to the `main` branch.
+  All these cycles runs on every push or pull request to the `main` branch.
 - After `deploy-staging` completes, `deploy-production` is triggered automatically on a Git `release` event.
 
 ---
