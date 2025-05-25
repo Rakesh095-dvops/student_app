@@ -73,7 +73,7 @@ jobs:
       - name: clean up old files
         run: |
             sudo rm -rf *
-            sudo mkdir -p /home/ubuntu/app
+            mkdir -p /home/ubuntu/app
           
       - name: Clone or update repo on Staging EC2
         uses: appleboy/ssh-action@v1.0.1
@@ -84,7 +84,7 @@ jobs:
           script: |
             set -e
             if [ ! -d "/home/ubuntu/app/.git" ]; then
-              git clone https://github.com/${{ github.repository }} /home/ubuntu/app
+              git clone https://github.com/${{ github.repository}}.git /home/ubuntu/app
             else
               cd /home/ubuntu/app
               git fetch --all
@@ -131,7 +131,7 @@ jobs:
       - name: clean up old files
         run: |
             sudo rm -rf *
-            sudo mkdir -p /home/ubuntu/app
+            mkdir -p /home/ubuntu/app
           
       - name: Clone or update repo on Staging EC2
         uses: appleboy/ssh-action@v1.0.1
@@ -142,7 +142,7 @@ jobs:
           script: |
             set -e
             if [ ! -d "/home/ubuntu/app/.git" ]; then
-              git clone https://github.com/${{ github.repository }} /home/ubuntu/app
+              git clone https://github.com/${{ github.repository}}.git /home/ubuntu/app
             else
               cd /home/ubuntu/app
               git fetch --all
