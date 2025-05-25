@@ -107,7 +107,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "student_app/.env student_app/docker-compose.yml student_app/docker-compose.staging.yml"
           target: "/home/ubuntu/app"
-          workdir: "/home/runner/work/${{ github.repository }}/"
+        
       - name: Deploy to Staging EC2 with Docker Compose
         uses: appleboy/ssh-action@v1.0.1
         with:
