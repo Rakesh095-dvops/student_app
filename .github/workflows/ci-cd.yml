@@ -129,7 +129,6 @@ jobs:
   deploy-production:
       if: github.event_name == 'release' 
       runs-on: ubuntu-latest
-      needs: deploy-staging
       steps:
         - uses: actions/checkout@v4
         - name: clean up old files
