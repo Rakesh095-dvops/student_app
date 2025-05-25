@@ -98,13 +98,14 @@ jobs:
           ls -la docker-compose.yml
           ls -la docker-compose.staging.yml
           echo "Current directory: $(pwd)"
+     
       - name: Deploy to AWS EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.STAGING_EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: ".env docker-compose.yml docker-compose.staging.yml"
+          source: "student_app/.env student_app/docker-compose.yml student_app/docker-compose.staging.yml"
           target: "/home/ubuntu/app"
           workdir: "/home/runner/work/${{ github.repository }}/"
       - name: Deploy to Staging EC2 with Docker Compose
