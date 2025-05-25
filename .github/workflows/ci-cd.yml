@@ -72,7 +72,8 @@ jobs:
       
       - name: clean up old files
         run: |
-            
+            sudo mkdir -p /home/ubuntu/app
+            sudo chown $USER:$USER /home/ubuntu/app
             rm -rf *
             mkdir -p /home/ubuntu/app 
           
@@ -133,8 +134,8 @@ jobs:
         run: |
             # Clean up old files in the app directory          
             rm -rf *
-            mkdir -p /home/ubuntu/app 
-          
+            sudo mkdir -p /home/ubuntu/app
+            sudo chown $USER:$USER /home/ubuntu/app
       - name: Clone or update repo on Staging EC2
         uses: appleboy/ssh-action@v1.0.1
         with:
