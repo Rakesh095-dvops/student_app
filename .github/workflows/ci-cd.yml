@@ -82,7 +82,7 @@ jobs:
       - name: List files
         run: |
           ls -la
-          pwd 
+          echo "Current directory: $(pwd)"
       - name: Ensure app directory exists on Staging EC2
         uses: appleboy/ssh-action@v1.0.1
         with:
@@ -91,35 +91,21 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             mkdir -p /home/ubuntu/app
+            ls -l /home/ubuntu/app
       - name: Verify Required Files
         run: |
           ls -la .env
           ls -la docker-compose.yml
           ls -la docker-compose.staging.yml
-      - name: Deploy to AWS EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.STAGING_EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: |
-            .env
-            docker-compose.yml
-            docker-compose.staging.yml
-          target: "/home/ubuntu/app"   
-      - name: Check files before SCP
-        run: ls -l .env docker-compose.yml docker-compose.staging.yml
+          echo "Current directory: $(pwd)"
       - name: Deploy to AWS EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.STAGING_EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: |
-            .env
-            docker-compose.yml
-            docker-compose.staging.yml
-          target: "/home/ubuntu/app"
+          source: ".env docker-compose.yml docker-compose.staging.yml"
+          target: "/home/ubuntu/app"   
       - name: Deploy to Staging EC2 with Docker Compose
         uses: appleboy/ssh-action@v1.0.1
         with:
