@@ -69,66 +69,37 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy to Staging EC2 with Docker Compose
-        uses: appleboy/ssh-action@v1.0.1
-        with:
-          host: ${{ secrets.STAGING_EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            # 1. Clean up all files in /home/ubuntu/app (including volumes)
-            echo "Cleaning up /home/ubuntu/app directory and stopping containers..."
-            if [ -d "/home/ubuntu/app" ]; then
-              cd /home/ubuntu/app
-              sudo docker-compose down --volumes || true # Stop and remove containers and volumes
-              cd ~
-              sudo rm -rf /home/ubuntu/app/* # Remove all files in the directory
-            fi
-
-            # 2. Create folder /home/ubuntu/app
-            echo "Creating folder /home/ubuntu/app"
-            mkdir -p /home/ubuntu/app
-
-            # 3. cd /home/ubuntu/app folder
-            echo "Changing directory to /home/ubuntu/app"
-            cd /home/ubuntu/app
-
-            # 4. Clone git repo main
-            echo "Cloning repository"
-            git clone https://github.com/${{ github.repository }}.git . # Assuming current repo, adjust if different
-            git checkout main # Ensure we are on the main branch
-
-            # 5. Create .env file
-            echo "Creating .env file"
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
-            echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-            echo "COLLECTION_NAME=${{ secrets.COLLECTION_NAME }}" >> .env
-            echo "IMAGE_NAME=${{ secrets.DOCKER_HUB_REPOSITORY }}" >> .env
-            echo "IMAGE_TAG=latest" >> .env
-
-            # 5.5 print .env file for debugging
-            echo "Contents of .env file:"
-            cat .env
-
-            # 6. Docker compose down and remove any volume (already handled in step 1, but good to ensure here if a fresh setup)
-            echo "Ensuring containers are down and volumes are removed (if any remained from prior state)..."
-            sudo docker-compose down --volumes || true
-
-            # 7. Pull docker image from repo with .env file and run docker compose build with .env file
-            echo "Logging into Docker Hub and pulling latest Docker image..."
-            echo "${{ secrets.DOCKER_PASSWORD }}" | sudo docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
-
-            echo "Building and starting containers with docker-compose.yml and docker-compose.staging.yml..."
-            sudo docker-compose -f docker-compose.yml -f docker-compose.staging.yml --env-file ./.env pull
-            sudo docker-compose -f docker-compose.yml -f docker-compose.staging.yml --env-file ./.env build --no-cache
-            sudo docker-compose -f docker-compose.yml -f docker-compose.staging.yml --env-file ./.env up -d --remove-orphans
-
-            echo "Container status:"
-            sudo docker-compose ps
-
-            # 8. Docker compose logs
-            echo "Displaying Docker Compose logs (last 50 lines):"
-            sudo docker-compose logs --tail 50
+      - name: Clean the deployment directory
+        run: |
+          echo "Cleaning up /home/ubuntu/app directory..."
+          if [ -d "/home/ubuntu/app" ]; then
+            sudo rm -rf /home/ubuntu/app
+          fi
+          mkdir -p /home/ubuntu/app
+      - name: Clone the repository
+        run: |
+          echo "Cloning repository..."
+          git clone https://github.com/${{ github.repository }} /home/ubuntu/app
+          cd /home/ubuntu/app
+          git checkout main
+      - name: Create .env file
+        run: |
+          echo "MONGO_URI=${{ secrets.MONGO_URI }}" > /home/ubuntu/app/.env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> /home/ubuntu/app/.env
+          echo "COLLECTION_NAME=${{ secrets.COLLECTION_NAME }}" >> /home/ubuntu/app/.env
+          echo "IMAGE_NAME=${{ secrets.DOCKER_HUB_REPOSITORY }}" >> /home/ubuntu/app/.env
+          echo "IMAGE_TAG=latest" >> /home/ubuntu/app/.env
+      - name: Debug .env file
+        run: |
+          echo "Contents of .env file:"
+          cat /home/ubuntu/app/.env
+      - name: Deploy with Docker Compose
+        run: |
+          echo "Starting deployment..."
+          cd /home/ubuntu/app
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker-compose -f docker-compose.yml -f docker-compose.staging.yml --env-file ./.env pull
+          docker-compose -f docker-compose.yml -f docker-compose.staging.yml --env-file ./.env up -d --remove-orphans
 
   deploy-production:
     if: github.event_name == 'release' && github.event.action == 'published'
