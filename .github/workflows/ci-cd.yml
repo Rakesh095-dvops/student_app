@@ -84,7 +84,8 @@ jobs:
           script: |
             set -e
             if [ ! -d "/home/ubuntu/app/.git" ]; then
-              sudo git clone https://github.com/${{ github.repository}}.git /home/ubuntu/app
+              #sudo git clone https://github.com/${{ github.repository}}.git /home/ubuntu/app
+              sudo git clone https://${{secrets.GIT_PAT}}@github.com/username/repo.git /home/ubuntu/app
             else
               cd /home/ubuntu/app
               sudo git fetch --all
@@ -142,7 +143,8 @@ jobs:
           script: |
             set -e
             if [ ! -d "/home/ubuntu/app/.git" ]; then
-              sudo git clone https://github.com/${{ github.repository}}.git /home/ubuntu/app
+              #sudo git clone https://github.com/${{ github.repository}}.git /home/ubuntu/app
+              sudo git clone https://${{secrets.GIT_PAT}}@github.com/username/repo.git /home/ubuntu/app
             else
               cd /home/ubuntu/app
               sudo git fetch --all
