@@ -122,11 +122,11 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |         
             echo "Health check passed for Staging EC2."
-            curl -f ${env.STAGING_EC2_HOST}:5000/health
+            curl -f http://${STAGING_EC2_HOST}:5000/health
   deploy-production:
     if: github.event_name == 'release' && github.event.action == 'published'
     runs-on: deploy-staging
-    needs: build
+    needs: deploy-staging
     steps:
       - uses: actions/checkout@v4
       
@@ -174,4 +174,4 @@ jobs:
             sudo docker-compose ps
             echo "Deployment to Production EC2 completed successfully."            
             echo "Health check passed for Staging EC2."
-            curl -f ${env.PROD_EC2_HOST}:5000/health
+            curl -f http://${STAGING_EC2_HOST}:5000/health
