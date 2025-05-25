@@ -73,7 +73,7 @@ jobs:
       - name: clean up old files
         run: |
             sudo rm -rf *
-            mkdir -p /home/ubuntu/app
+            sudo mkdir -p /home/ubuntu/app
           
       - name: Clone or update repo on Staging EC2
         uses: appleboy/ssh-action@v1.0.1
@@ -84,11 +84,11 @@ jobs:
           script: |
             set -e
             if [ ! -d "/home/ubuntu/app/.git" ]; then
-              git clone https://github.com/${{ github.repository}}.git /home/ubuntu/app
+              sudo git clone https://github.com/${{ github.repository}}.git /home/ubuntu/app
             else
               cd /home/ubuntu/app
-              git fetch --all
-              git reset --hard origin/main
+              sudo git fetch --all
+              sudo git reset --hard origin/main
             fi
             cd /home/ubuntu/app
             echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
@@ -131,7 +131,7 @@ jobs:
       - name: clean up old files
         run: |
             sudo rm -rf *
-            mkdir -p /home/ubuntu/app
+            sudo mkdir -p /home/ubuntu/app
           
       - name: Clone or update repo on Staging EC2
         uses: appleboy/ssh-action@v1.0.1
@@ -142,11 +142,11 @@ jobs:
           script: |
             set -e
             if [ ! -d "/home/ubuntu/app/.git" ]; then
-              git clone https://github.com/${{ github.repository}}.git /home/ubuntu/app
+              sudo git clone https://github.com/${{ github.repository}}.git /home/ubuntu/app
             else
               cd /home/ubuntu/app
-              git fetch --all
-              git reset --hard origin/main
+              sudo git fetch --all
+              sudo git reset --hard origin/main
             fi
             cd /home/ubuntu/app
             echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
