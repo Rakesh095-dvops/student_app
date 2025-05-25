@@ -4,8 +4,8 @@
 - Add, view, fetch, and delete students
 - REST API with Flask
 - Tested with pytest
-- Dockerized
-- CI/CD ready with Jenkins
+- Dockerize using docker-compose 
+- CI/CD ready with Jenkins and git Action 
 
 ## 🚀 Run Locally
 
