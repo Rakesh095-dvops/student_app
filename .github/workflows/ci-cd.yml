@@ -74,13 +74,21 @@ jobs:
           echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
           echo "COLLECTION_NAME=${{ secrets.COLLECTION_NAME }}" >> .env
-          echo "IMAGE_NAME=${DOCKER_HUB_REPOSITORY}" >> .env
-          echo "IMAGE_TAG=${IMAGE_TAG}" >> .env
-      - name: List files
+          echo "IMAGE_NAME=${{ secrets.DOCKER_HUB_REPOSITORY }}" >> .env
+          echo "IMAGE_TAG=latest" >> .env
+
+      - name: Debug file paths
         run: |
+          echo "Files in workspace:"
           ls -la
-          find . -type f
-          echo "Current directory: $(pwd)"
+          echo "Files in /home/runner/work/student_app/student_app/:"
+          ls -la /home/runner/work/student_app/student_app/
+
+      - name: Validate required files
+        run: |
+          [ -f .env ] || (echo ".env file is missing" && exit 1)
+          [ -f docker-compose.yml ] || (echo "docker-compose.yml is missing" && exit 1)
+          [ -f docker-compose.staging.yml ] || (echo "docker-compose.staging.yml is missing" && exit 1)
       - name: Ensure app directory exists on Staging EC2
         uses: appleboy/ssh-action@v1.0.1
         with:
