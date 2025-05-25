@@ -72,7 +72,7 @@ jobs:
       
       - name: clean up old files
         run: |
-            cd /home/ubuntu
+            
             rm -rf *
             mkdir -p /home/ubuntu/app 
           
@@ -131,8 +131,8 @@ jobs:
       
       - name: clean up old files
         run: |
-        
-            cd /home/ubuntu
+
+           
             rm -rf *
             mkdir -p /home/ubuntu/app 
           
