@@ -131,8 +131,7 @@ jobs:
       
       - name: clean up old files
         run: |
-
-           
+            # Clean up old files in the app directory          
             rm -rf *
             mkdir -p /home/ubuntu/app 
           
